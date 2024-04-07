@@ -12,6 +12,7 @@ Sovelluksen ominaisuuksia:
 
 Välipalautus 2:
 Sovelluksen perusrakenne alkaa hahmottumaan. Joitakin syötteen varmennuksia puuttuu vielä sekä ruokalista-arvonta ja kauppalistan koonti. 
+
 Tähän mennessä tehtynä:
 - Tunnuksen luonti ja kirjautuminen
 - Uusien reseptien lisäys

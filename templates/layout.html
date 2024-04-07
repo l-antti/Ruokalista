@@ -1,0 +1,20 @@
+<!doctype html>
+<title>RUOKALISTA - {% block title %}{% endblock %}</title>
+<h1>Ruokalista</h1>
+<a href="/">Etusivu</a>
+{% if session.username %}
+<a href="/">Luo ruokalista</a>
+<a href="/reseptit">Selaa reseptejä</a>
+
+<a href="/new_recipe">Lisää resepti</a>
+
+<a href="/">Omat suosikit</a>
+
+<a href="/logout">Kirjaudu ulos</a>
+{% else %}
+<a href="/login">Kirjautuminen</a>
+{% endif %}
+<hr>
+{% block content %}{% endblock %}
+<hr>
+

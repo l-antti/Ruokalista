@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block title %}Kirjautuminen{% endblock %}
+{% block content %}
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<h2>Reseptit</h2>
+{% for recipe in recipes %}
+    <a href="/recipe_page/{{ recipe.name }}">{{recipe.name}}</a>
+    {% endfor %}
+
+
+{% endblock %}
+
+

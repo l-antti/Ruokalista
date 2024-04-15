@@ -1,10 +1,26 @@
 <!doctype html>
+<head>
+    <style>
+    .flashes {
+        padding: 10px;
+        background-color: #f9edbe;
+        border: 1px solid #f0c36d;
+        color: #222;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+    </style>
+</head>
+
 <title>RUOKALISTA - {% block title %}{% endblock %}</title>
 <h1>Ruokalista</h1>
 <a href="/">Etusivu</a>
+
+<a href="/reseptit">Selaa reseptejä</a>
+
 {% if session.username %}
 <a href="/">Luo ruokalista</a>
-<a href="/reseptit">Selaa reseptejä</a>
+
 
 <a href="/new_recipe">Lisää resepti</a>
 

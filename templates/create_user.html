@@ -14,8 +14,8 @@
 <p>Olet kirjautunut nimellä {{ session.username }}</p>
 <a href="/logout">Kirjaudu ulos</a>
 {% else %}
-<h2>Kirjautuminen</h2>
-<form action="/new_user" method="POST">
+<h2>Luo uusi käyttäjä</h2>
+<form action="/register/check" method="POST">
 <p>Tunnus:<br>
 <input type="text" name="username"></p>
 <p>Salasana:<br>
@@ -25,5 +25,6 @@
 <input type="submit" value="Luo tunnus">
 </form>
 {% endif %}
+
 {% endblock %}
 

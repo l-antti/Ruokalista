@@ -43,23 +43,14 @@ def create_user(username, password, password2):
     
     
 def validator(username, password, password2):
-    if not username or not password or not password2:
-        flash("Yritä uudelleen. Käyttäjätunnus ja salasana tarvitaan rekisteröitymiseen") 
-        return False 
-    if not len(username) > 3:
-        flash("Yritä uudelleen. Käyttäjätunnuksessa pitää olla vähintään 4 merkkiä")
-        return False
-    if not len(username) < 13:
-        flash("Yritä uudelleen. Käyttäjätunnuksessa saa olla enintään 12 merkkiä")     
-        return False
     if not password == password2:
-        flash("Yritä uudelleen. Salasanat eivät täsmää")
+        flash("Yritä uudelleen! Salasanat eivät täsmää")
         return False
-    if not len(password) > 8:
-        flash("Yritä uudelleen. Salasanassa tulee olla vähintään 8 merkkiä")
+    if len(password) < 7 or len(password) > 25:
+        flash("Yritä uudelleen! Salasanassa tulee olla 7-24 merkkiä")
         return False
     if double_user(username) == False:
-       flash("Yritä uudelleen. Käyttäjätunnus on jo käytössä")
+       flash("Yritä uudelleen! Käyttäjätunnus on jo käytössä")
        return False
        
     return True

@@ -7,26 +7,27 @@ CREATE TABLE recipes (
     id SERIAL PRIMARY KEY,
     name TEXT,
     class TEXT,
-    instructions TEXT,
-    ingredients TEXT
+    instructions TEXT 
 );
 CREATE TABLE user_recipes (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users,
     recipe_id INTEGER REFERENCES recipes
 );
-CREATE TABLE ingridients (
+CREATE TABLE ingredients (
     id SERIAL PRIMARY KEY,
     name TEXT
+);    
+CREATE TABLE units (
+    id SERIAL PRIMARY KEY,
+    name TEXT 
 );
-CREATE TABLE recipe_ingridients (
+CREATE TABLE recipe_ingredients (
     id SERIAL PRIMARY KEY,
     recipe_id INTEGER REFERENCES recipes,
-    ingridient_id INTEGER REFERENCES ingridients,
+    ingredient_id INTEGER REFERENCES ingredients,
     amount INTEGER,
-    measure_id INTEGER REFERENCES measures
+    unit_id INTEGER REFERENCES units
 );    
-CREATE TABLE measures (
-    id SERIAL PRIMARY KEY,
-    name TEXT      
-);
+     
+

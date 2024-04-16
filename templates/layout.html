@@ -1,36 +1,68 @@
 <!doctype html>
+<html lang="fi">
 <head>
-    <style>
-    .flashes {
-        padding: 10px;
-        background-color: #f9edbe;
-        border: 1px solid #f0c36d;
-        color: #222;
-        border-radius: 5px;
-        margin-bottom: 20px;
-    }
-    </style>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+  <title>Ruokalista</title>
 </head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">Ruokalista</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/reseptit">Selaa reseptejä</a>
+        </li>
+        {% if session.username %}
+        <li class="nav-item">
+          <a class="nav-link" href="/create_menu">Luo ruokalista</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/new_recipe">Lisää resepti</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/favorites">Omat suosikit</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">Kirjaudu ulos</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="/login">Kirjautuminen</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
 
-<title>RUOKALISTA - {% block title %}{% endblock %}</title>
-<h1>Ruokalista</h1>
-<a href="/">Etusivu</a>
+  <div class="container">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="alert alert-warning mt-3">
+        {% for message in messages %}
+          {{ message }}
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}
+    
+    {% endblock %}
+  </div>
 
-<a href="/reseptit">Selaa reseptejä</a>
-
-{% if session.username %}
-<a href="/">Luo ruokalista</a>
-
-
-<a href="/new_recipe">Lisää resepti</a>
-
-<a href="/">Omat suosikit</a>
-
-<a href="/logout">Kirjaudu ulos</a>
-{% else %}
-<a href="/login">Kirjautuminen</a>
-{% endif %}
-<hr>
-{% block content %}{% endblock %}
-<hr>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
 

@@ -1,27 +1,42 @@
-
 {% extends "layout.html" %}
+
 {% block title %}Uusi resepti{% endblock %}
+
 {% block content %}
 
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul class=flashes>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
-
-
-<form action="/new_recipe" method="POST">
+<form id="recipeForm" action="/new_recipe/add" method="POST">
 <p>Reseptin nimi:<br>
 <input type="text" name="name"></p>
-<p>Raaka-aineet:<br>
-<input type="text" name="ingredients"></p>
+<div id="ingredients">
+<p>Raaka-aineet (nimi, määrä, yksikkö): <br>
+<p>:<br>
+<input type="text" name="ingredientName">
+<input type="number" name="ingredientAmount" min="0">
+<select name="ingredientUnit">
+  <option value="g">g</option>
+  <option value="kg">kg</option>
+  <option value="ml">ml</option>
+  <option value="l">l</option>
+  <option value="tbsp">tbsp</option>
+  <option value="tsp">tsp</option>
+</select>
+</p>
+</div>
+
+<button type="button" id="addIngredient">Uusi raaka-aine</button>
 <p>Valmistusohje:<br>
 <input type="text" name="instructions"></p>
+
 <input type="submit" value="Lisää resepti">
 </form>
 
+<script>
+document.getElementById('addIngredient').addEventListener('click', function() {
+  var newIngredient = document.createElement('p');
+  newIngredient.innerHTML = '<br><input type="text" name="ingredientName"><input type="number" name="ingredientAmount" min="0"><select name="ingredientUnit"><option value="g">g</option><option value="kg">kg</option><option value="ml">ml</option><option value="l">l</option><option value="tbsp">tbsp</option><option value="tsp">tsp</option></select>';
+  document.getElementById('ingredients').appendChild(newIngredient);
+});
+</script>
+
 {% endblock %}
+

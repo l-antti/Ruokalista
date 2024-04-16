@@ -29,14 +29,21 @@
 
 <input type="submit" value="Lisää resepti">
 </form>
-
 <script>
 document.getElementById('addIngredient').addEventListener('click', function() {
   var newIngredient = document.createElement('p');
-  newIngredient.innerHTML = '<br><input type="text" name="ingredientName"><input type="number" name="ingredientAmount" min="0"><select name="ingredientUnit"><option value="g">g</option><option value="kg">kg</option><option value="ml">ml</option><option value="l">l</option><option value="tbsp">tbsp</option><option value="tsp">tsp</option></select>';
+  newIngredient.innerHTML = '<br><input type="text" name="ingredientName"><input type="number" name="ingredientAmount" min="0"><select name="ingredientUnit"><option value="g">g</option><option value="kg">kg</option><option value="ml">ml</option><option value="l">l</option><option value="tbsp">tbsp</option><option value="tsp">tsp</option></select><button type="button" class="removeIngredient">Poista raaka-aine</button>';
   document.getElementById('ingredients').appendChild(newIngredient);
 });
+
+document.getElementById('ingredients').addEventListener('click', function(e) {
+  if(e.target && e.target.classList.contains('removeIngredient')) {
+    e.target.parentNode.remove();
+  }
+});
 </script>
+
+
 
 {% endblock %}
 

@@ -2,9 +2,11 @@
 # käsittelee sivupyynnöt
 
 from app import app
-from flask import Flask, render_template, request, redirect, flash, url_for
+from flask import Flask, render_template, request, redirect, flash, url_for, session
 import users, recipes
-from recipes import validate_input
+from form_processing import validate_input, process_form_data
+
+
 
 
 
@@ -61,27 +63,23 @@ def register_check():
             
 @app.route("/new_recipe")
 def new_recipe():
-    return render_template("new_recipe.html")
+    # Retrieve form data from session if it exists
+    form_data = session.get('form_data', {})
+    return render_template("new_recipe.html", form_data=form_data)
     
     
 @app.route("/new_recipe/add", methods=["POST"])      
 def add_new_recipe():
     try:
-        name = validate_input(request.form.get("name"), "reseptin nimi", 3, 50)
-        instructions = validate_input(request.form.get("instructions"),"valmistusohje", 5, 500)
-        
-        ingredient_names = [validate_input(name, "raaka-aine", 3, 50) for name in request.form.getlist("ingredientName")]
-        ingredient_amounts = [validate_input(amount, "määrä", 1, 10) for amount in request.form.getlist("ingredientAmount")]
-        ingredient_units = [validate_input(unit, "yksikkö", 1, 20) for unit in request.form.getlist("ingredientUnit")]
-        
-        # Combine ingredients into a list of dictionaries
-        ingredients = [{"name": n, "amount": a, "unit": u} for n, a, u in zip(ingredient_names, ingredient_amounts, ingredient_units)]
-
+        name, instructions, ingredients = process_form_data(request.form)
         flash("Reseptin lisäys onnistui!")           
         return redirect(url_for("recipe_page", name=name))  
     except ValueError as e:
         flash(str(e))
+        # Clear form data from session after use
+        session.pop('form_data', None)
         return redirect(url_for("new_recipe"))
+
     
 @app.route("/reseptit")
 def browse_recipes():

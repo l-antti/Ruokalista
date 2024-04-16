@@ -34,16 +34,6 @@ def add_recipe(name, ingredients, instructions):
     db.session.commit()
 
 
-def validate_input(input_string, input, min_length, max_length):
-    if not input_string:
-        raise ValueError(f"{input}-kenttä ei voi olla tyhjä!")
-    elif len(input_string) < min_length:
-        raise ValueError(f"Hieman liian lyhyt {input}-kenttä! Anna vähintään {min_length} merkkiä.")
-    elif len(input_string) > max_length:
-        raise ValueError(f"Nyt meni {input}-kenttä pitkäksi! Maksimipituus on {max_length} merkkiä.")
-    return input_string
-
-
 def get_recipe(name):
     sql = text("SELECT name, ingredients, instructions FROM recipes WHERE name = :name")
     result = db.session.execute(sql, {"name": name}).fetchone()

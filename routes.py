@@ -94,11 +94,18 @@ def recipe_page(id):
     return render_template("recipe_page.html", recipe=recipe)
 
 
+@app.route("/search")
+def search():
+    query = request.args.get("query")
+    recipe_list = recipes.search_recipes(query)
+    return render_template("search.html", recipes=recipe_list)
+
 
 @app.route("/menu")
 def menu_view():
     menu = recipes.weekly_menu()
     return render_template("menu.html", weekly_menu=menu)
+
 
 @app.route("/menu/generate", methods=["POST"])
 def generate_menu():

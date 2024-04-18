@@ -5,6 +5,13 @@
 
 <h2>Reseptit</h2>
 
+<form method="GET" action="{{ url_for('search') }}">
+    <input type="text" name="query" placeholder="Hae reseptejä...">
+    <input type="submit" value="Hae">
+</form>
+
+
+
 {% for recipe in recipes %}
     <li>
         <a href="{{ url_for('recipe_page', id=recipe.id) }}">{{ recipe.recipename }}</a>

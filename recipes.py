@@ -80,6 +80,52 @@ def get_recipe(id):
         "ingredients": ingredients_list
     }
     
+ 
+def search_recipes(query):
+    # Search by recipe name
+    sql = text("SELECT id, recipename, instructions FROM recipes WHERE LOWER(recipename) LIKE LOWER(:query)")
+    recipes = db.session.execute(sql, {"query": "%" + query + "%"}).fetchall()
+
+    # Search by ingredient
+    sql = text("""
+        SELECT r.id, r.recipename, r.instructions 
+        FROM recipes r
+        JOIN recipe_ingredients ri ON r.id = ri.recipe_id
+        JOIN ingredients i ON ri.ingredient_id = i.id
+        WHERE LOWER(i.name) LIKE LOWER(:query)
+    """)
+    recipes_by_ingredient = db.session.execute(sql, {"query": "%" + query + "%"}).fetchall()
+
+    # Combine the results
+    recipes.extend(recipes_by_ingredient)
+
+    # Remove duplicates
+    recipes = list(set(recipes))
+
+    # Fetch ingredients for each recipe
+    for recipe in recipes:
+        sql = text("""
+            SELECT i.name, ri.amount, u.unit 
+            FROM recipe_ingredients ri 
+            JOIN ingredients i ON ri.ingredient_id = i.id 
+            JOIN units u ON ri.unit_id = u.id 
+            WHERE ri.recipe_id = :recipe_id
+        """)
+        ingredients = db.session.execute(sql, {"recipe_id": recipe.id}).fetchall()
+
+        # Convert ingredients list to a list of objects
+        ingredients_list = [{"name": i, "amount": ri, "unit": u} for i, ri, u in ingredients]
+
+        # Create a new dictionary for the recipe
+        recipe_dict = {"id": recipe.id, "recipename": recipe.recipename, "instructions": recipe.instructions, "ingredients": ingredients_list}
+
+        # Replace the original recipe with the new dictionary
+        recipes[recipes.index(recipe)] = recipe_dict
+
+
+    return recipes
+ 
+    
 def list_recipes():
     sql = text("SELECT id, recipename FROM recipes ORDER BY recipename DESC")
     result = db.session.execute(sql).fetchall()

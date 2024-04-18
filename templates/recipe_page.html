@@ -4,15 +4,24 @@
 
 <h2>{{recipe.recipename}}</h2>
 
-<h3>Raaka-aineet:</h3>
-<ul>
+<h4>Raaka-aineet:</h4>
+<table>
+    
 {% for ingredient in recipe.ingredients %}
-    <li>{{ingredient.name}}: {{ingredient.amount}} {{ingredient.unit}}</li>
+    <tr>
+        <td>{{ingredient.amount}}</td>
+        <td>{{ingredient.unit}}</td>
+        <td>{{ingredient.name}}</td>
+    </tr>
 {% endfor %}
-</ul>
+</table>
 
-<h3>Valmistusohje:</h3>
+<h4>Valmistusohje:</h4>
 <p>{{recipe.instructions}}</p>
+
+<a href="{{ url_for('browse_recipes') }}" class="btn" style="background-color: darkgreen; color: white;">Palaa takaisin</a>
+
+
 
 {% endblock %}
 

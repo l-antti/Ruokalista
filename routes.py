@@ -45,7 +45,7 @@ def register():
 @app.route("/register/check", methods=["POST"])      
 def register_check():
     try:
-        username = validate_input(request.form["username"], "Käyttäjänimi", 3, 12)
+        username = request.form["username"]
         password = request.form["password"]
         password2 = request.form["password2"]
         

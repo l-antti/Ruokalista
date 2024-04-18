@@ -9,19 +9,16 @@ import random
 
 
 def add_ingredient(name):
-    
     result = db.session.execute(text("SELECT id FROM ingredients WHERE name = :name"), {"name": name}).fetchone()
-   
     if result is None:
         result = db.session.execute(text("INSERT INTO ingredients (name) VALUES (:name) RETURNING id"), {"name": name}).fetchone()
-    
     return result[0]
 
 
 def add_unit(unit):
     result = db.session.execute(text("SELECT id FROM units WHERE unit = :unit"), {"unit": unit}).fetchone()
     if result is None:
-        result = db.session.execute(text("INSERT INTO units (unit) VALUES (:unit) RETURNING id"), {"unit": unit}).fetchone()
+        raise ValueError(f"Mittayksikköä {unit} ei löydy tietokannasta.")
     return result[0]
     
 

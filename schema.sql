@@ -29,5 +29,5 @@ CREATE TABLE recipe_ingredients (
     unit_id INTEGER REFERENCES units
 );  
   
-     
+INSERT INTO units (unit) VALUES ('g'), ('kpl'), ('ml'), ('rkl'), ('tl');     
 

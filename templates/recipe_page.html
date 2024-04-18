@@ -1,15 +1,18 @@
-
 {% extends "layout.html" %}
-{% block title %}Kirjautuminen{% endblock %}
+{% block title %}{{recipe.recipename}}{% endblock %}
 {% block content %}
 
+<h2>{{recipe.recipename}}</h2>
 
-<h2>{{recipe.name}}</h2>
+<h3>Raaka-aineet:</h3>
+<ul>
+{% for ingredient in recipe.ingredients %}
+    <li>{{ingredient.name}}: {{ingredient.amount}} {{ingredient.unit}}</li>
+{% endfor %}
+</ul>
 
-Raaka-aineet:
-<p>{{recipe.ingredients}}</p>
-
-Valmistusohje:
+<h3>Valmistusohje:</h3>
 <p>{{recipe.instructions}}</p>
 
 {% endblock %}
+

@@ -8,8 +8,6 @@ from form_processing import validate_input, process_form_data
 
 
 
-
-
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -71,34 +69,41 @@ def new_recipe():
 @app.route("/new_recipe/add", methods=["POST"])      
 def add_new_recipe():
     try:
-        name, instructions, ingredients = process_form_data(request.form)
-        flash("Reseptin lisäys onnistui!")           
-        return redirect(url_for("recipe_page", name=name))  
+        recipename, ingredients, instructions = process_form_data(request.form)
+        recipe = recipes.add_recipe(recipename, ingredients, instructions)
+        return redirect(url_for("new_recipe"))  
     except ValueError as e:
         flash(str(e))
-        # Clear form data from session after use
         session.pop('form_data', None)
+        
         return redirect(url_for("new_recipe"))
 
     
-@app.route("/reseptit")
+@app.route("/recipes")
 def browse_recipes():
     recipe_list = recipes.list_recipes()
     return render_template("list_recipes.html", recipes=recipe_list)
  
  
-@app.route("/recipe_page/<path:name>")
-def recipe_page(name):
-    recipe = recipes.get_recipe(name)
+@app.route("/recipe_page/<int:id>")
+def recipe_page(id):
+    recipe = recipes.get_recipe(id)
     if recipe is None:
         flash("Reseptiä ei löytynyt!")
         return redirect(url_for("index"))
     return render_template("recipe_page.html", recipe=recipe)
 
 
-@app.route("/ruokalista", methods=["GET", "POST"])
-def menu():
-    pass
+
+@app.route("/menu")
+def menu_view():
+    menu = recipes.weekly_menu()
+    return render_template("menu.html", weekly_menu=menu)
+
+@app.route("/menu/generate", methods=["POST"])
+def generate_menu():
+    recipes.generate_weekly_menu()
+    return redirect(url_for("menu_view"))
              
     
     

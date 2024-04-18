@@ -5,8 +5,7 @@ CREATE TABLE users (
 );
 CREATE TABLE recipes (
     id SERIAL PRIMARY KEY,
-    name TEXT,
-    class TEXT,
+    recipename TEXT,
     instructions TEXT 
 );
 CREATE TABLE user_recipes (
@@ -20,7 +19,7 @@ CREATE TABLE ingredients (
 );    
 CREATE TABLE units (
     id SERIAL PRIMARY KEY,
-    name TEXT 
+    unit TEXT 
 );
 CREATE TABLE recipe_ingredients (
     id SERIAL PRIMARY KEY,
@@ -28,6 +27,7 @@ CREATE TABLE recipe_ingredients (
     ingredient_id INTEGER REFERENCES ingredients,
     amount INTEGER,
     unit_id INTEGER REFERENCES units
-);    
+);  
+  
      
 

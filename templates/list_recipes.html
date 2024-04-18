@@ -4,9 +4,13 @@
 
 
 <h2>Reseptit</h2>
+
 {% for recipe in recipes %}
-    <a href="/recipe_page/{{ recipe.name }}">{{recipe.name}}</a>
-    {% endfor %}
+    <li>
+        <a href="{{ url_for('recipe_page', id=recipe.id) }}">{{ recipe.recipename }}</a>
+    </li>
+{% endfor %}
+
 
 
 {% endblock %}

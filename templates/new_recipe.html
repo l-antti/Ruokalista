@@ -6,13 +6,12 @@
 
 <form id="recipeForm" action="/new_recipe/add" method="POST">
 <p>Reseptin nimi:<br>
-<input type="text" name="name"></p>
+<input type="text" name="recipename"></p>
 <div id="ingredients">
 <p>Raaka-aineet (nimi, määrä, yksikkö): <br>
-<p>:<br>
-<input type="text" name="ingredientName">
-<input type="number" name="ingredientAmount" min="0">
-<select name="ingredientUnit">
+<input type="text" name="ingredients[0].name">
+<input type="number" name="ingredients[0].amount" min="0">
+<select name="ingredients[0].unit">
   <option value="g">g</option>
   <option value="kg">kg</option>
   <option value="ml">ml</option>
@@ -30,10 +29,13 @@
 <input type="submit" value="Lisää resepti">
 </form>
 <script>
+var ingredientIndex = 1;
+
 document.getElementById('addIngredient').addEventListener('click', function() {
   var newIngredient = document.createElement('p');
-  newIngredient.innerHTML = '<br><input type="text" name="ingredientName"><input type="number" name="ingredientAmount" min="0"><select name="ingredientUnit"><option value="g">g</option><option value="kg">kg</option><option value="ml">ml</option><option value="l">l</option><option value="tbsp">tbsp</option><option value="tsp">tsp</option></select><button type="button" class="removeIngredient">Poista raaka-aine</button>';
+  newIngredient.innerHTML = '<br><input type="text" name="ingredients[' + ingredientIndex + '].name"><input type="number" name="ingredients[' + ingredientIndex + '].amount" min="0"><select name="ingredients[' + ingredientIndex + '].unit"><option value="g">g</option><option value="kg">kg</option><option value="ml">ml</option><option value="l">l</option><option value="tbsp">tbsp</option><option value="tsp">tsp</option></select><button type="button" class="removeIngredient">Poista raaka-aine</button>';
   document.getElementById('ingredients').appendChild(newIngredient);
+  ingredientIndex++;
 });
 
 document.getElementById('ingredients').addEventListener('click', function(e) {
@@ -43,7 +45,7 @@ document.getElementById('ingredients').addEventListener('click', function(e) {
 });
 </script>
 
-
-
 {% endblock %}
+
+
 

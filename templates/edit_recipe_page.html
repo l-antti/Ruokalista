@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block title %}Muokkaa reseptiä{% endblock %}
+
+{% block content %}
+
+<form id="recipeForm" action="/recipe_page/{{ recipe.id }}/edit_recipe" method="POST">
+<input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
+<p>Reseptin nimi:<br>
+<input type="text" name="recipename" value="{{ recipe.recipename }}"></p>
+<div id="ingredients">
+{% for ingredient in recipe.ingredients %}
+<p>Raaka-aineet (nimi, määrä, yksikkö): <br>
+<input type="text" name="ingredients[0].name" value="{{ ingredient.name }}">
+<input type="number" name="ingredients[0].amount" min="0" value="{{ ingredient.amount }}">
+<select name="ingredients[0].unit">
+  <option value="g" {% if ingredient.unit == 'g' %}selected{% endif %}>g</option>
+  <option value="kpl" {% if ingredient.unit == 'kpl' %}selected{% endif %}>kpl</option>
+  <option value="ml" {% if ingredient.unit == 'ml' %}selected{% endif %}>ml</option>
+  <option value="rkl" {% if ingredient.unit == 'rkl' %}selected{% endif %}>rkl</option>
+  <option value="tl" {% if ingredient.unit == 'tl' %}selected{% endif %}>tl</option>
+</select>
+</p>
+{% endfor %}
+</div>
+
+<button type="button" id="addIngredient">Uusi raaka-aine</button>
+<p>Valmistusohje:<br>
+<input type="text" name="instructions" value="{{ recipe.instructions }}"></p>
+
+<input type="submit" value="Päivitä resepti">
+</form>
+<script>
+var ingredientIndex = 1;
+
+document.getElementById('addIngredient').addEventListener('click', function() {
+  var newIngredient = document.createElement('p');
+  newIngredient.innerHTML = '<br><input type="text" name="ingredients[' + ingredientIndex + '].name"><input type="number" name="ingredients[' + ingredientIndex + '].amount" min="0"><select name="ingredients[' + ingredientIndex + '].unit"><option value="g">g</option><option value="kpl">kpl</option><option value="ml">ml</option><option value="rkl">rkl</option><option value="tl">tl</option></select><button type="button" class="removeIngredient">Poista raaka-aine</button>';
+  document.getElementById('ingredients').appendChild(newIngredient);
+  ingredientIndex++;
+});
+
+document.getElementById('ingredients').addEventListener('click', function(e) {
+  if(e.target && e.target.classList.contains('removeIngredient')) {
+    e.target.parentNode.remove();
+  }
+});
+</script>
+
+{% endblock %}

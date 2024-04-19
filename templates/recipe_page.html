@@ -22,6 +22,8 @@
 <a href="{{ url_for('browse_recipes') }}" class="btn" style="background-color: darkgreen; color: white;">Palaa takaisin</a>
 
 
+<a href="{{ url_for('edit_recipes', id=recipe.id) }}" class="btn" style="background-color: darkred; color: white;">Muokkaa reseptiä</a>
+
 
 {% endblock %}
 

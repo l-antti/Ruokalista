@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block title %}{{user.username}}{% endblock %}
+{% block content %}
+
+<h2>Omat sivut</h2>
+Tervetuloa omille sivuillesi {{ user.username }}!
+
+<h3>Suosikkireseptini</h3>
+{% if favourite_recipes %}
+  <ul>
+  {% for recipe in favourite_recipes %}
+    <li><a href="{{ url_for('recipe', id=recipe.id) }}">{{ recipe.recipename }}</a></li>
+  {% endfor %}
+  </ul>
+{% else %}
+  <p>Ei suosikkireseptejä.</p>
+{% endif %}
+
+{% endblock %}

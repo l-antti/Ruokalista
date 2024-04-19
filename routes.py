@@ -135,7 +135,7 @@ def edit_recipes(id):
         return redirect(url_for("index"))
     
     # Get the recipe details
-    recipe = get_recipe(id)
+    recipe = recipes.get_recipe(id)
     if recipe is None:
         flash("Reseptiä ei löytynyt!")
         return redirect(url_for("index"))
@@ -149,10 +149,11 @@ def edit_added_recipe(id):
     if session.get("csrf_token") != request.form.get("csrf_token"):
         abort(403)
     try:
-        # Fetch the recipe details from the form
-        recipename = request.form.get("recipename")
-        instructions = request.form.get("instructions")
-        ingredients = request.form.getlist("ingredients")
+        # Process the form data
+        recipename, ingredients, instructions = process_form_data(request.form)
+        
+        # Call the function to update the recipe in the database
+        recipes.edit_recipe(id, recipename, ingredients, instructions)
         
         flash("Resepti päivitetty onnistuneesti!")
         return redirect(url_for("recipe_page", id=id))
@@ -162,6 +163,7 @@ def edit_added_recipe(id):
         session.pop('form_data', None)
         
         return redirect(url_for("new_recipe"))    
+   
     
 
 @app.route("/search")

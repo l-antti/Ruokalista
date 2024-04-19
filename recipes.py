@@ -12,6 +12,8 @@ def add_ingredient(name):
     result = db.session.execute(text("SELECT id FROM ingredients WHERE name = :name"), {"name": name}).fetchone()
     if result is None:
         result = db.session.execute(text("INSERT INTO ingredients (name) VALUES (:name) RETURNING id"), {"name": name}).fetchone()
+    else:
+        db.session.execute(text("UPDATE ingredients SET name = :name WHERE id = :id"), {"name": name, "id": result[0]})
     return result[0]
 
 
@@ -66,6 +68,12 @@ def edit_recipe(id, recipename, ingredients, instructions):
             ingredient_id = add_ingredient(ingredient_name)
             unit_id = add_unit(ingredient_unit)
             
+            # Update the ingredient and unit details
+            sql = text("UPDATE ingredients SET name = :name WHERE id = :id")
+            db.session.execute(sql, {"name": ingredient_name, "id": ingredient_id})
+            sql = text("UPDATE units SET unit = :unit WHERE id = :id")
+            db.session.execute(sql, {"unit": ingredient_unit, "id": unit_id})
+            
             db.session.execute(text("INSERT INTO recipe_ingredients (recipe_id, ingredient_id, amount, unit_id) VALUES (:recipe_id, :ingredient_id, :amount, :unit_id)"), {"recipe_id": id, "ingredient_id": ingredient_id, "amount": ingredient["amount"], "unit_id": unit_id})
         db.session.commit()
         flash("Reseptin päivitys onnistui!")
@@ -78,8 +86,6 @@ def edit_recipe(id, recipename, ingredients, instructions):
             'ingredients': ingredients,
             'instructions': instructions
         }
-
-
         
 def get_recipe(id):
     # Fetch recipe details

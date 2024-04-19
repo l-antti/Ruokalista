@@ -4,13 +4,19 @@
 from app import app
 from flask import Flask, render_template, request, redirect, flash, url_for, session, abort
 import users, recipes
-from form_processing import validate_input, process_form_data, generate_csrf_token
+from form_processing import validate_input, process_form_data
 from datetime import timedelta
+import random, secrets
 
 @app.before_request
 def make_session_permanent():
     session.permanent = True
     app.permanent_session_lifetime = timedelta(hours=1)
+    
+@app.before_request
+def generate_csrf_token():
+    if 'csrf_token' not in session:
+        session['csrf_token'] = secrets.token_hex(16)
 
 @app.route("/")
 def index():
@@ -19,7 +25,6 @@ def index():
 
 @app.route("/login")
 def login():
-    generate_csrf_token()
     return render_template("login.html")
         
         
@@ -47,7 +52,6 @@ def logout():
                  
 @app.route("/register")
 def register():
-    generate_csrf_token()
     return render_template("create_user.html")
       
       
@@ -111,7 +115,6 @@ def remove_from_favorites(id):
             
 @app.route("/new_recipe")
 def new_recipe():
-    generate_csrf_token()
     # Retrieve form data from session if it exists
     form_data = session.get('form_data', {})
     return render_template("new_recipe.html", form_data=form_data)
@@ -191,18 +194,33 @@ def search():
     query = request.args.get("query")
     recipe_list = recipes.search_recipes(query)
     return render_template("search.html", recipes=recipe_list)
-
-
+    
+    
 @app.route("/menu")
 def menu_view():
-    menu = recipes.weekly_menu()
-    return render_template("menu.html", weekly_menu=menu)
+    menu = session.get('menu', recipes.weekly_menu())
+    recipes_list = recipes.list_recipes()
+    weekdays = session.get('weekdays', recipes.weekdays()) 
+    
+    return render_template("menu.html", weekly_menu=menu, recipes=recipes_list, weekdays = weekdays)
 
+ 
 
 @app.route("/menu/generate", methods=["POST"])
 def generate_menu():
-    recipes.generate_weekly_menu()
+    if session.get("csrf_token") != request.form.get("csrf_token"):
+        abort(403)
+    menu = recipes.generate_weekly_menu()
+    session['menu'] = menu
+    session['weekdays'] = recipes.weekdays()
     return redirect(url_for("menu_view"))
-             
-    
+
+
+@app.route("/menu/recipes")
+def menu_recipes():
+    recipe_list = recipes.list_recipes()
+    return render_template("list_recipes.html", recipes=recipe_list)
+
+
+
     

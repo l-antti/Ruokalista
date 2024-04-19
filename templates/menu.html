@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title %}Viikon ruokalista{% endblock %}
+
+{% block content %}
+<h1>Viikon ruokalista</h1>
+    <table style="border: 1px solid black; padding: 10px;">
+        <tr>
+            <th></th>
+            <th>Lounas</th>
+            <th>Päivällinen</th>
+        </tr>
+        {% for day, meals in weekly_menu.items() %}
+        <tr>
+            <td>{{ weekdays[day] }}</td>
+            <td>
+                <a href="{{ url_for('recipe_page', id=meals['Lunch']['id']) }}">{{ meals["Lunch"]["recipename"] }}</a>
+
+            </td>
+            <td>
+                <a href="{{ url_for('recipe_page', id=meals['Dinner']['id']) }}">{{ meals["Dinner"]["recipename"] }}</a>
+
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <form action="{{ url_for('generate_menu') }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
+        <button type="submit">Generoi uusi lista</button>
+    </form>
+{% endblock %}
+
+
+

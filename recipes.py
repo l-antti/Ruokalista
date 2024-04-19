@@ -153,7 +153,7 @@ def search_recipes(query):
 def list_recipes():
     sql = text("SELECT id, recipename FROM recipes ORDER BY recipename DESC")
     result = db.session.execute(sql).fetchall()
-    return result    
+    return result   
  
  
 def get_favourite_recipes(id):
@@ -177,7 +177,6 @@ def add_to_favourites(recipe_id, user_id):
     flash("Resepti lisätty suosikkeihin!")
     
 
-
 def remove_from_favourites(recipe_id, user_id):
     sql = text("DELETE FROM user_recipes WHERE user_id = :user_id AND recipe_id = :recipe_id")
     db.session.execute(sql, {"user_id": user_id, "recipe_id": recipe_id})
@@ -198,11 +197,24 @@ def generate_weekly_menu():
         lunch = leftovers if leftovers else random.choice(recipe_list)
         dinner = random.choice(recipe_list)
         weekly_menu[i] = {
-            "Lunch": lunch,
-            "Dinner": dinner
+            "Lunch": {"id": lunch[0], "recipename": lunch[1]},
+            "Dinner": {"id": dinner[0], "recipename": dinner[1]}
         }
         leftovers = dinner  # Save dinner as leftovers for the next day
-    return weekly_menu
     
+    return weekly_menu
+
+    
+def weekdays():
+    days = {
+    0: 'Maanantai',
+    1: 'Tiistai',
+    2: 'Keskiviikko',
+    3: 'Torstai',
+    4: 'Perjantai',
+    5: 'Lauantai',
+    6: 'Sunnuntai'
+}
+    return days
 
 

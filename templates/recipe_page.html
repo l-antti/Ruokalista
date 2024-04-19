@@ -1,7 +1,22 @@
 {% extends "layout.html" %}
-{% block title %}{{recipe.recipename}}{% endblock %}
-{% block content %}
 
+{% block title %}{{recipe.recipename}}{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <style>
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+    }
+    .button-container .btn {
+        margin: 10px; 
+    }
+    </style>
+{% endblock %}
+
+
+{% block content %}
 <h2>{{recipe.recipename}}</h2>
 
 <h4>Raaka-aineet:</h4>
@@ -18,20 +33,24 @@
 <h4>Valmistusohje:</h4>
 <p>{{recipe.instructions}}</p>
 
-<a href="{{ url_for('browse_recipes') }}" class="btn" style="background-color: darkgreen; color: white;">Palaa takaisin</a>
+<div class="button-container">
+<a href="{{ url_for('browse_recipes') }}" class="btn" style="background-color: darkgreen; color: white;">Palaa selaukseen</a>
+
+<a href="{{ url_for('menu_view') }}" class="btn" style="background-color: darkgreen; color: white;">Palaa ruokalistaan</a>
+
+<br>
 
 <a href="{{ url_for('edit_recipes', id=recipe.id) }}" class="btn" style="background-color: darkred; color: white;">Muokkaa reseptiä</a>
 
-<!-- Lisää suosikiksi -painike -->
-{% if recipe.id in favourite_recipes %}
-  <form action="{{ url_for('remove_from_favorites', id=recipe.id) }}" method="post">
-    <button type="submit" class="btn" style="background-color: darkred; color: white;">Poista suosikeista</button>
-  </form>
-{% else %}
+
   <form action="{{ url_for('add_to_favorites', id=recipe.id) }}" method="post">
     <button type="submit" class="btn" style="background-color: darkblue; color: white;">Lisää suosikiksi</button>
   </form>
-{% endif %}
+
+</div>
+
+
 
 {% endblock %}
+
 

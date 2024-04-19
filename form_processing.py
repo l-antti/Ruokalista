@@ -1,4 +1,12 @@
+# form processing module
+
 from flask import session
+import secrets
+
+
+def generate_csrf_token():
+    if 'csrf_token' not in session:
+        session['csrf_token'] = secrets.token_hex(16)
 
 
 def validate_input(input_string, input, min_length, max_length, capitalize=True):
@@ -37,5 +45,9 @@ def process_form_data(form):
         i += 1
     
     return recipename, ingredients, instructions
+    
+
+
+
 
 

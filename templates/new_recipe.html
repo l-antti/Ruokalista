@@ -5,6 +5,7 @@
 {% block content %}
 
 <form id="recipeForm" action="/new_recipe/add" method="POST">
+<input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
 <p>Reseptin nimi:<br>
 <input type="text" name="recipename"></p>
 <div id="ingredients">

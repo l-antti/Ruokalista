@@ -8,12 +8,15 @@
 {% else %}
 <h2>Kirjautuminen</h2>
 <form action="/login/check" method="POST">
-<p>Tunnus:<br>
-<input type="text" name="username"></p>
-<p>Salasana:<br>
-<input type="password" name="password"></p>
-<input type="submit" value="Kirjaudu">
+    <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
+    <p>Tunnus:<br>
+    <input type="text" name="username"></p>
+    <p>Salasana:<br>
+    <input type="password" name="password"></p>
+    <input type="submit" value="Kirjaudu">
 </form>
+
+
 <a href="/register">Luo tunnus</a>
 {% endif %}
 {% endblock %}

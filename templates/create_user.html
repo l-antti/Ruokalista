@@ -9,6 +9,7 @@
 {% else %}
 <h2>Luo uusi käyttäjä</h2>
 <form action="/register/check" method="POST">
+<input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
 <p>Tunnus:<br>
 <input type="text" name="username"></p>
 <p>Salasana:<br>

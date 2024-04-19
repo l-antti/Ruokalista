@@ -2,28 +2,27 @@
 # käsittelee sivupyynnöt
 
 from app import app
-from flask import Flask, render_template, request, redirect, flash, url_for, session
+from flask import Flask, render_template, request, redirect, flash, url_for, session, abort
 import users, recipes
-from form_processing import validate_input, process_form_data
-from flask_wtf.csrf import CSRFError
-
+from form_processing import validate_input, process_form_data, generate_csrf_token
 
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
-@app.errorhandler(CSRFError)
-def handle_csrf_error(e):
-    return "CSRF-tarkistus epäonnistui. Yritä uudelleen.", 400
 
 @app.route("/login")
 def login():
+    generate_csrf_token()
     return render_template("login.html")
         
         
 @app.route("/login/check", methods=["POST"])        
 def login_check():
+    if session.get("csrf_token") != request.form.get("csrf_token"):
+        abort(403)
+ 
     username = request.form["username"]
     password = request.form["password"]
     if users.login_user(username, password):
@@ -43,21 +42,24 @@ def logout():
                  
 @app.route("/register")
 def register():
+    generate_csrf_token()
     return render_template("create_user.html")
       
       
 @app.route("/register/check", methods=["POST"])      
 def register_check():
+    if session.get("csrf_token") != request.form.get("csrf_token"):
+        abort(403)
     try:
         username = request.form["username"]
         password = request.form["password"]
         password2 = request.form["password2"]
-        
+            
         if users.create_user(username, password, password2) == False:
             return redirect(url_for("register")) 
         else:
-            flash("Tilin luominen onnistui! Kirjaudu sisään nähdäksesi enemmän.")           
-            return redirect(url_for("login"))
+             flash("Tilin luominen onnistui! Kirjaudu sisään nähdäksesi enemmän.")           
+             return redirect(url_for("login"))
     except ValueError as e:
         flash(str(e))
         return redirect(url_for("register"))
@@ -65,6 +67,7 @@ def register_check():
             
 @app.route("/new_recipe")
 def new_recipe():
+    generate_csrf_token()
     # Retrieve form data from session if it exists
     form_data = session.get('form_data', {})
     return render_template("new_recipe.html", form_data=form_data)
@@ -72,6 +75,8 @@ def new_recipe():
     
 @app.route("/new_recipe/add", methods=["POST"])      
 def add_new_recipe():
+    if session.get("csrf_token") != request.form.get("csrf_token"):
+        abort(403)
     try:
         recipename, ingredients, instructions = process_form_data(request.form)
         recipe = recipes.add_recipe(recipename, ingredients, instructions)

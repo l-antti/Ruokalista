@@ -196,15 +196,7 @@ def search():
     return render_template("search.html", recipes=recipe_list)
     
     
-@app.route("/menu")
-def menu_view():
-    menu = session.get('menu', recipes.weekly_menu())
-    recipes_list = recipes.list_recipes()
-    weekdays = session.get('weekdays', recipes.weekdays()) 
-    
-    return render_template("menu.html", weekly_menu=menu, recipes=recipes_list, weekdays = weekdays)
 
- 
 
 @app.route("/menu/generate", methods=["POST"])
 def generate_menu():
@@ -214,12 +206,26 @@ def generate_menu():
     session['menu'] = menu
     session['weekdays'] = recipes.weekdays()
     return redirect(url_for("menu_view"))
-
+    
+@app.route("/menu")
+def menu_view():
+    menu = session.get('menu')
+    recipes_list = recipes.list_recipes()
+    weekdays = session.get('weekdays', recipes.weekdays()) 
+    
+    return render_template("menu.html", weekly_menu=menu, recipes=recipes_list, weekdays = weekdays)
 
 @app.route("/menu/recipes")
 def menu_recipes():
     recipe_list = recipes.list_recipes()
     return render_template("list_recipes.html", recipes=recipe_list)
+
+@app.route("/generate_shopping_list")
+def generate_shopping_list():
+    weekly_menu = session.get('menu')
+    shopping_list = recipes.get_shopping_list(weekly_menu)
+    return render_template("shopping_list.html", shopping_list=shopping_list)
+
 
 
 

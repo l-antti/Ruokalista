@@ -183,9 +183,6 @@ def remove_from_favourites(recipe_id, user_id):
     db.session.commit()
 
 
-def weekly_menu():
-    menu = generate_weekly_menu()
-    return menu
 
 
 def generate_weekly_menu():
@@ -216,5 +213,33 @@ def weekdays():
     6: 'Sunnuntai'
 }
     return days
+
+
+def get_weekly_menu():
+    # Hae tallennettu viikoittainen valikko sessionista
+    weekly_menu = session.get('menu', recipes.generate_weekly_menu())
+    return weekly_menu
+    
+    
+def get_shopping_list(weekly_menu):
+    shopping_list = {}
+    for day, meals in weekly_menu.items():
+        # Vain päivällinen otetaan huomioon
+        dinner_recipe = meals["Dinner"]
+        recipe_id = dinner_recipe["id"]
+        recipe = get_recipe(recipe_id)
+        for ingredient in recipe['ingredients']:
+            # Lisää ainesosa ostoslistalle
+            if ingredient['name'] not in shopping_list:
+                shopping_list[ingredient['name']] = {
+                    'amount': 0,
+                    'unit': ingredient['unit']
+                }
+            shopping_list[ingredient['name']]['amount'] += ingredient['amount']
+    shopping_list_items = [f"{item}: {data['amount']} {data['unit']}" for item, data in shopping_list.items()]
+    return shopping_list_items
+
+    
+
 
 

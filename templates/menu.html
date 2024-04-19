@@ -26,8 +26,9 @@
     </table>
     <form action="{{ url_for('generate_menu') }}" method="post">
         <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
-        <button type="submit">Generoi uusi lista</button>
+        <button type="submit" class="btn btn-primary">Generoi uusi lista</button>
     </form>
+    <a href="{{ url_for('generate_shopping_list') }}" class="btn btn-success">Siirry ostoslistalle</a>
 {% endblock %}
 
 

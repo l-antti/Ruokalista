@@ -9,7 +9,14 @@ Tervetuloa omille sivuillesi {{ user.username }}!
 {% if favourite_recipes %}
   <ul>
   {% for recipe in favourite_recipes %}
-    <li><a href="{{ url_for('recipe', id=recipe.id) }}">{{ recipe.recipename }}</a></li>
+    <li>
+      <a href="{{ url_for('recipe_page', id=recipe.id) }}">{{ recipe.recipename }}</a>
+      
+      
+      <form action="{{ url_for('remove_from_favorites', id=recipe.id) }}" method="post">
+        <button type="submit" class="btn" style="background-color: darkred; color: white;">Poista suosikeista</button>
+      </form>
+    </li>
   {% endfor %}
   </ul>
 {% else %}
@@ -17,3 +24,4 @@ Tervetuloa omille sivuillesi {{ user.username }}!
 {% endif %}
 
 {% endblock %}
+

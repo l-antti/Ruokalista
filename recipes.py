@@ -162,6 +162,28 @@ def get_favourite_recipes(id):
     return result
 
 
+def add_to_favourites(recipe_id, user_id):
+    # Tarkista, onko resepti jo suosikkilistalla
+    sql = text("SELECT * FROM user_recipes WHERE user_id = :user_id AND recipe_id = :recipe_id")
+    result = db.session.execute(sql, {"user_id": user_id, "recipe_id": recipe_id}).fetchone()
+    if result:
+        flash("Resepti on jo suosikkilistallasi!")
+        return
+
+    # Jos resepti ei ole suosikkilistalla, lisää se
+    sql = text("INSERT INTO user_recipes (user_id, recipe_id) VALUES (:user_id, :recipe_id)")
+    db.session.execute(sql, {"user_id": user_id, "recipe_id": recipe_id})
+    db.session.commit()
+    flash("Resepti lisätty suosikkeihin!")
+    
+
+
+def remove_from_favourites(recipe_id, user_id):
+    sql = text("DELETE FROM user_recipes WHERE user_id = :user_id AND recipe_id = :recipe_id")
+    db.session.execute(sql, {"user_id": user_id, "recipe_id": recipe_id})
+    db.session.commit()
+
+
 def weekly_menu():
     menu = generate_weekly_menu()
     return menu

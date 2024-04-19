@@ -33,23 +33,7 @@ def login_check():
         return redirect(url_for("login"))
 
  
-@app.route("/profile/<int:id>")
-def profile(id):
-    if not users.is_user():
-        flash("Sinun täytyy olla kirjautunut sisään nähdäksesi tämän sivun.")
-        return redirect(url_for("login"))
-    allow = False
-    if users.is_admin():
-        allow = True
-    elif users.user_id() == id:
-        allow = True
-    if allow:
-        user = users.get_profile(id)
-        favourites = recipes.get_favourite_recipes(id)
-        return render_template("profile.html", user=user, favourite_recipes=favourites)
-    else:
-        flash("Ei oikeutta nähdä sivua")
-        return redirect(url_for("index"))
+
       
            
            
@@ -84,9 +68,44 @@ def register_check():
         flash(str(e))
         return redirect(url_for("register"))
  
-
+@app.route("/profile/<int:id>")
+def profile(id):
+    if not users.is_user():
+        flash("Sinun täytyy olla kirjautunut sisään nähdäksesi tämän sivun.")
+        return redirect(url_for("login"))
+    allow = False
+    if users.is_admin():
+        allow = True
+    elif users.user_id() == id:
+        allow = True
+    if allow:
+        user = users.get_profile(id)
+        favourites = recipes.get_favourite_recipes(id)
+        return render_template("profile.html", user=user, favourite_recipes=favourites)
+    else:
+        flash("Ei oikeutta nähdä sivua")
+        return redirect(url_for("index"))
         
 
+@app.route('/add_to_favorites/<int:id>', methods=['POST'])
+def add_to_favorites(id):
+    if not users.is_user():
+        flash("Sinun täytyy olla kirjautunut sisään lisätäksesi suosikkeja.")
+        return redirect(url_for("login"))
+    recipes.add_to_favourites(id, users.user_id())
+    
+    return redirect(url_for("recipe_page", id=id)) 
+
+
+
+@app.route('/remove_from_favorites/<int:id>', methods=['POST'])
+def remove_from_favorites(id):
+    if not users.is_user():
+        flash("Sinun täytyy olla kirjautunut sisään poistaaksesi suosikkeja.")
+        return redirect(url_for("login"))
+    recipes.remove_from_favourites(id, users.user_id())
+    flash("Resepti poistettu suosikeista!")
+    return redirect(url_for("profile", id=users.user_id()))
 
             
 @app.route("/new_recipe")

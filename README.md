@@ -8,7 +8,7 @@ Sovelluksen ominaisuuksia:
 - käyttäjä voi lisätä uusia reseptejä ja selata jo olemassa olevia reseptejä
 - käyttäjä pystyy etsimään reseptejä nimellä tai tietyllä raaka-aineella
 - ylläpitäjä voi luoda resepteille luokkia (_katsotaan kerkiänkö tätä_)
-- ylläpitäjä voi muokata tai poistaa reseptejä  (_katsotaan kerkiänkö tätä_)
+- ylläpitäjä voi muokata tai poistaa reseptejä  
 
 
 
@@ -26,13 +26,8 @@ Asennusohjeet:
 
 
 Välipalautus 3:
-Sovellus hyvässä mallissa. Raaka-aineiden kirjaaminen erikseen ja koostaminen yhdeksi kauppalistaksi on aiheuttanut hieman päänvaivaa, joten luultavasti ylläpitjän ominaisuudet jäävät tällä kertaa pois.
+Sovellus hyvässä mallissa. Ulkonäköä voisi vielä viilata. Raaka-aineiden kirjaaminen erikseen ja koostaminen yhdeksi kauppalistaksi aiheutti hieman päänvaivaa, joten luultavasti ylläpitäjän ominaisuudet jäävät tällä kertaa osittain pois.
 
-Tähän mennessä tehtynä:
-- tunnuksen luonti ja kirjautuminen
-- uusien reseptien lisäys
-- reseptien selausnäkymä
-- viikon menun arvonta ja muokkaus
   
 Välipalautus 2:
 Sovelluksen perusrakenne alkaa hahmottumaan. Joitakin syötteen varmennuksia puuttuu vielä sekä ruokalista-arvonta ja kauppalistan koonti. 

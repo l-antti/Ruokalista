@@ -5,6 +5,7 @@ from app import app
 from flask import Flask, render_template, request, redirect, flash, url_for, session
 import users, recipes
 from form_processing import validate_input, process_form_data
+from flask_wtf.csrf import CSRFError
 
 
 
@@ -12,6 +13,9 @@ from form_processing import validate_input, process_form_data
 def index():
     return render_template("index.html")
 
+@app.errorhandler(CSRFError)
+def handle_csrf_error(e):
+    return "CSRF-tarkistus epäonnistui. Yritä uudelleen.", 400
 
 @app.route("/login")
 def login():

@@ -50,7 +50,7 @@ def validator(username, password, password2):
         flash("Yritä uudelleen! Salasanassa tulee olla 7-24 merkkiä")
         return False
     if len(username) < 3 or len(username) > 19: 
-        flash("Yritä uudelleen! Käyttäjätunnuksessa tulee olla 7-24 merkkiä")   
+        flash("Yritä uudelleen! Käyttäjätunnuksessa tulee olla 4-18 merkkiä")   
     if double_user(username) == False:
        flash("Yritä uudelleen! Käyttäjätunnus on jo käytössä")
        return False

@@ -8,28 +8,46 @@ from sqlalchemy.sql import text
     
     
 def login_user(username, password):
-	sql = text("SELECT id, password FROM users WHERE username=:username")
-	result = db.session.execute(sql, {"username":username})
-	user = result.fetchone()    
-	if not user:
-	    return False
-	if not check_password_hash(user.password, password):
-	    return False
+    sql = text("SELECT id, password, admin FROM users WHERE username=:username")
+    result = db.session.execute(sql, {"username":username})
+    user = result.fetchone()    
+    if not user:
+        return False
+    if not check_password_hash(user.password, password):
+        return False
 	    
-	session["user_id"] = user.id
-	session["username"] = username
-	return True
-	    
+    session["user_id"] = user.id
+    session["username"] = username
+    session["logged_in"] = True
+    session["is_admin"] = user.admin  # Tallenna käyttäjän rooli istuntoon
+    return True
+
+
+def is_admin():
+    return session.get('is_admin', False)
+
+
+def is_user():
+    return 'logged_in' in session and session['logged_in']	    
+		
 		    
 def user_id():
     return session.get("user_id", 0)   
-     
-     
+   
 def logout_user():
     if "user_id" in session:
         del session["user_id"]
     if "username" in session:
         del session["username"]
+    session["logged_in"] = False  
+    
+def get_profile(id):
+    sql = text("SELECT * FROM users WHERE id=:id")
+    result = db.session.execute(sql, {"id": id}).fetchone()
+    return result
+    
+     
+
 
 
 def create_user(username, password, password2):

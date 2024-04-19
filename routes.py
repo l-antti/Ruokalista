@@ -31,7 +31,27 @@ def login_check():
     else:
         flash("Kirjautuminen epäonnistui. Väärä käyttäjätunnus tai salasana")
         return redirect(url_for("login"))
-        
+
+ 
+@app.route("/profile/<int:id>")
+def profile(id):
+    if not users.is_user():
+        flash("Sinun täytyy olla kirjautunut sisään nähdäksesi tämän sivun.")
+        return redirect(url_for("login"))
+    allow = False
+    if users.is_admin():
+        allow = True
+    elif users.user_id() == id:
+        allow = True
+    if allow:
+        user = users.get_profile(id)
+        favourites = recipes.get_favourite_recipes(id)
+        return render_template("profile.html", user=user, favourite_recipes=favourites)
+    else:
+        flash("Ei oikeutta nähdä sivua")
+        return redirect(url_for("index"))
+      
+           
            
 @app.route("/logout")
 def logout():
@@ -64,6 +84,10 @@ def register_check():
         flash(str(e))
         return redirect(url_for("register"))
  
+
+        
+
+
             
 @app.route("/new_recipe")
 def new_recipe():
@@ -102,6 +126,43 @@ def recipe_page(id):
         return redirect(url_for("index"))
     return render_template("recipe_page.html", recipe=recipe)
 
+
+
+@app.route("/recipe_page/<int:id>/edit")
+def edit_recipes(id):
+    if not users.is_admin():
+        flash("Vain ylläpitäjät voivat muokata reseptejä!")
+        return redirect(url_for("index"))
+    
+    # Get the recipe details
+    recipe = get_recipe(id)
+    if recipe is None:
+        flash("Reseptiä ei löytynyt!")
+        return redirect(url_for("index"))
+    
+    # Pass the recipe details to the template
+    return render_template("edit_recipe_page.html", recipe=recipe)
+
+
+@app.route("/recipe_page/<int:id>/edit_recipe", methods=["POST"])      
+def edit_added_recipe(id):
+    if session.get("csrf_token") != request.form.get("csrf_token"):
+        abort(403)
+    try:
+        # Fetch the recipe details from the form
+        recipename = request.form.get("recipename")
+        instructions = request.form.get("instructions")
+        ingredients = request.form.getlist("ingredients")
+        
+        flash("Resepti päivitetty onnistuneesti!")
+        return redirect(url_for("recipe_page", id=id))
+        
+    except ValueError as e:
+        flash(str(e))
+        session.pop('form_data', None)
+        
+        return redirect(url_for("new_recipe"))    
+    
 
 @app.route("/search")
 def search():

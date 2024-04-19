@@ -5,7 +5,12 @@ from app import app
 from flask import Flask, render_template, request, redirect, flash, url_for, session, abort
 import users, recipes
 from form_processing import validate_input, process_form_data, generate_csrf_token
+from datetime import timedelta
 
+@app.before_request
+def make_session_permanent():
+    session.permanent = True
+    app.permanent_session_lifetime = timedelta(hours=1)
 
 @app.route("/")
 def index():
@@ -32,11 +37,7 @@ def login_check():
         flash("Kirjautuminen epäonnistui. Väärä käyttäjätunnus tai salasana")
         return redirect(url_for("login"))
 
- 
-
-      
-           
-           
+   
 @app.route("/logout")
 def logout():
     users.logout_user()

@@ -202,18 +202,19 @@ def search():
 def generate_menu():
     if session.get("csrf_token") != request.form.get("csrf_token"):
         abort(403)
-    menu = recipes.generate_weekly_menu()
+    menu = session.get('menu', recipes.generate_weekly_menu())
     session['menu'] = menu
     session['weekdays'] = recipes.weekdays()
     return redirect(url_for("menu_view"))
     
 @app.route("/menu")
 def menu_view():
-    menu = session.get('menu')
+    menu = session.get('menu', recipes.generate_weekly_menu())
     recipes_list = recipes.list_recipes()
     weekdays = session.get('weekdays', recipes.weekdays()) 
     
     return render_template("menu.html", weekly_menu=menu, recipes=recipes_list, weekdays = weekdays)
+
 
 @app.route("/menu/recipes")
 def menu_recipes():

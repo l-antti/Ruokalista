@@ -1,57 +1,59 @@
 {% extends "layout.html" %}
-
-{% block title %}{{recipe.recipename}}{% endblock %}
+{% block title %}{{ recipe.recipename }}{% endblock %}
 
 {% block head %}
     {{ super() }}
     <style>
-    .button-container {
-        display: flex;
-        justify-content: space-between;
-    }
-    .button-container .btn {
-        margin: 10px; 
-    }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .button-container .btn {
+            margin: 10px; 
+            flex-grow: 1;
+            text-align: center;
+        }
+        .list-group-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .list-group-item > div {
+            flex-basis: 33%;
+        }
     </style>
 {% endblock %}
 
-
 {% block content %}
-<h2>{{recipe.recipename}}</h2>
+<div class="container mt-4">
+    <h2 class="mb-3">{{ recipe.recipename }}</h2>
 
-<h4>Raaka-aineet:</h4>
-<table>
-{% for ingredient in recipe.ingredients %}
-    <tr>
-        <td>{{ingredient.amount}}</td>
-        <td>{{ingredient.unit}}</td>
-        <td>{{ingredient.name}}</td>
-    </tr>
+    <h4>Raaka-aineet:</h4>
+   {% for ingredient in recipe.ingredients %}
+  <div class="row">
+    <div class="col-auto">{{ ingredient.amount }}</div>
+    <div class="col-auto">{{ ingredient.unit }}</div>
+    <div class="col">{{ ingredient.name }}</div>
+  </div>
 {% endfor %}
-</table>
-
-<h4>Valmistusohje:</h4>
-<p>{{recipe.instructions}}</p>
-
-<div class="button-container">
-<a href="{{ url_for('browse_recipes') }}" class="btn" style="background-color: darkgreen; color: white;">Palaa selaukseen</a>
-
-<a href="{{ url_for('menu_view') }}" class="btn" style="background-color: darkgreen; color: white;">Palaa ruokalistaan</a>
+    </div>
+<br>
+    <h4>Valmistusohje:</h4>
+    <p>{{ recipe.instructions }}</p>
 
 <br>
-
-<a href="{{ url_for('edit_recipes', id=recipe.id) }}" class="btn" style="background-color: darkred; color: white;">Muokkaa reseptiä</a>
-
-
-  <form action="{{ url_for('add_to_favorites', id=recipe.id) }}" method="post">
-  <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
-    <button type="submit" class="btn" style="background-color: darkblue; color: white;">Lisää suosikiksi</button>
-  </form>
-
+    <div class="button-container">
+        <a href="{{ url_for('browse_recipes') }}" class="btn btn-success">Palaa selaukseen</a>
+        <a href="{{ url_for('menu_view') }}" class="btn btn-success">Palaa ruokalistaan</a>
+        <a href="{{ url_for('edit_recipes', id=recipe.id) }}" class="btn btn-danger">Muokkaa reseptiä</a>
+        <form action="{{ url_for('add_to_favorites', id=recipe.id) }}" method="post">
+            <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
+            <button type="submit" class="btn btn-primary">Lisää suosikiksi</button>
+        </form>
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">Palaa etusivulle</a>
+    </div>
 </div>
-
-
-
 {% endblock %}
 
 

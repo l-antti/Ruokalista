@@ -1,14 +1,19 @@
 {% extends "layout.html" %}
-{% block title %}Haku{% endblock %}
+{% block title %}Hakutulokset{% endblock %}
 {% block content %}
-
-<h2>Hakutulokset</h2>
-
-{% for recipe in recipes %}
-    <li>
-        <a href="{{ url_for('recipe_page', id=recipe.id) }}">{{ recipe.recipename }}</a>
-    </li>
-{% endfor %}
-
+<div class="container mt-4">
+    <h2 class="mb-4">Hakutulokset</h2>
+    <ul class="list-group">
+        {% for recipe in recipes %}
+            <li class="list-group-item">
+                <a href="{{ url_for('recipe_page', id=recipe.id) }}">{{ recipe.recipename }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+<br>
+<a href="{{ url_for('index') }}" class="btn btn-secondary">Palaa etusivulle</a>
+</div>
 {% endblock %}
+
 

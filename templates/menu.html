@@ -3,32 +3,41 @@
 {% block title %}Viikon ruokalista{% endblock %}
 
 {% block content %}
-<h1>Viikon ruokalista</h1>
-    <table style="border: 1px solid black; padding: 10px;">
-        <tr>
-            <th></th>
-            <th>Lounas</th>
-            <th>Päivällinen</th>
-        </tr>
-        {% for day, meals in weekly_menu.items() %}
-        <tr>
-            <td>{{ weekdays[day] }}</td>
-            <td>
-                <a href="{{ url_for('recipe_page', id=meals['Lunch']['id']) }}">{{ meals["Lunch"]["recipename"] }}</a>
-
-            </td>
-            <td>
-                <a href="{{ url_for('recipe_page', id=meals['Dinner']['id']) }}">{{ meals["Dinner"]["recipename"] }}</a>
-
-            </td>
-        </tr>
-        {% endfor %}
+<div class="container mt-4">
+    <h1 class="mb-4">Viikon ruokalista</h1>
+    <table class="table table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">Päivä</th>
+                <th scope="col">Lounas</th>
+                <th scope="col">Päivällinen</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for day, meals in weekly_menu.items() %}
+            <tr>
+                <td>{{ weekdays[day] }}</td>
+                <td>
+                    <a href="{{ url_for('recipe_page', id=meals['Lunch']['id']) }}">{{ meals["Lunch"]["recipename"] }}</a>
+                </td>
+                <td>
+                    <a href="{{ url_for('recipe_page', id=meals['Dinner']['id']) }}">{{ meals["Dinner"]["recipename"] }}</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
-    <form action="{{ url_for('generate_menu') }}" method="post">
-        <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
-        <button type="submit" class="btn btn-primary">Generoi uusi lista</button>
-    </form>
-    <a href="{{ url_for('generate_shopping_list') }}" class="btn btn-success">Siirry ostoslistalle</a>
+    <div class="d-flex justify-content-between mb-3">
+        <form action="{{ url_for('generate_menu') }}" method="post">
+            <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
+            <button type="submit" class="btn btn-primary">Generoi uusi lista</button>
+        </form>    
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">Palaa etusivulle</a>
+</div>
+        <a href="{{ url_for('generate_shopping_list') }}" class="btn btn-success">Siirry ostoslistalle</a>
+    </div>
+
+
 {% endblock %}
 
 

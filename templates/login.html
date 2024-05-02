@@ -2,23 +2,33 @@
 {% block title %}Kirjautuminen{% endblock %}
 
 {% block content %}
-{% if session.username %}
-<p>Olet kirjautunut nimellä {{ session.username }}</p>
-<a href="/logout">Kirjaudu ulos</a>
-{% else %}
-<h2>Kirjautuminen</h2>
-<form action="/login/check" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
-    <p>Tunnus:<br>
-    <input type="text" name="username"></p>
-    <p>Salasana:<br>
-    <input type="password" name="password"></p>
-    <input type="submit" value="Kirjaudu">
-</form>
-
-
-<a href="/register">Luo tunnus</a>
-{% endif %}
+<div class="container mt-4">
+    {% if session.username %}
+    <div class="alert alert-success" role="alert">
+        <p>Olet kirjautunut nimellä <strong>{{ session.username }}</strong>.</p>
+        <a href="/logout" class="btn btn-danger">Kirjaudu ulos</a>
+    </div>
+    {% else %}
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">Kirjautuminen</h2>
+            <form action="/login/check" method="POST" class="mb-3">
+                <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
+                <div class="form-group mb-3">
+                    <label for="username">Tunnus:</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="password">Salasana:</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <input type="submit" class="btn btn-primary" value="Kirjaudu">
+            </form>
+            <p>Etkö ole vielä jäsen? <a href="/register" class="card-link">Luo tunnus</a></p>
+        </div>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}
 
 

@@ -1,28 +1,34 @@
 {% extends "layout.html" %}
-{% block title %}{{user.username}}{% endblock %}
+{% block title %}{{ user.username }}{% endblock %}
+
 {% block content %}
+<div class="container mt-4">
+  <h2 class="mb-3">Omat sivut</h2>
+  <h3>Tervetuloa omille sivuillesi, {{ user.username }}!</h3>
 
-<h2>Omat sivut</h2>
-Tervetuloa omille sivuillesi {{ user.username }}!
+  <div class="my-4">
+    <h3>Suosikkireseptini</h3>
+    {% if favourite_recipes %}
+      <div class="list-group">
+      {% for recipe in favourite_recipes %}
+        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+          <a href="{{ url_for('recipe_page', id=recipe.id) }}" class="me-auto">
+            {{ recipe.recipename }}
+          </a>
+          <form action="{{ url_for('remove_from_favorites', id=recipe.id) }}" method="post">
+            <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
+            <button type="submit" class="btn btn-danger">Poista suosikeista</button>
+          </form>
+        </div>
+      {% endfor %}
+      </div>
+    {% else %}
+      <p>Ei suosikkireseptejä.</p>
+    {% endif %}
+  </div>
 
-<h3>Suosikkireseptini</h3>
-{% if favourite_recipes %}
-  <ul>
-  {% for recipe in favourite_recipes %}
-    <li>
-      <a href="{{ url_for('recipe_page', id=recipe.id) }}">{{ recipe.recipename }}</a>
-      
-      
-      <form action="{{ url_for('remove_from_favorites', id=recipe.id) }}" method="post">
-      <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
-        <button type="submit" class="btn" style="background-color: darkred; color: white;">Poista suosikeista</button>
-      </form>
-    </li>
-  {% endfor %}
-  </ul>
-{% else %}
-  <p>Ei suosikkireseptejä.</p>
-{% endif %}
 
+  <a href="{{ url_for('index') }}" class="btn btn-secondary">Palaa etusivulle</a>
+</div>
 {% endblock %}
 

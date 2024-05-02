@@ -1,25 +1,28 @@
 {% extends "layout.html" %}
-{% block title %}Kirjautuminen{% endblock %}
+{% block title %}Reseptit{% endblock %}
 {% block content %}
-
-
-<h2>Reseptit</h2>
-
-<form method="GET" action="{{ url_for('search') }}">
-    <input type="text" name="query" placeholder="Hae reseptejä...">
-    <input type="submit" value="Hae">
-</form>
-
-
-
-{% for recipe in recipes %}
-    <li>
-        <a href="{{ url_for('recipe_page', id=recipe.id) }}">{{ recipe.recipename }}</a>
-    </li>
-{% endfor %}
-
-
-
+<div class="container mt-4">
+    <h2 class="mb-4">Reseptit</h2>
+    <form method="GET" action="{{ url_for('search') }}" class="mb-3">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" name="query" placeholder="Hae reseptejä..." aria-label="Hae reseptejä">
+            <div class="input-group-append">
+                <input type="submit" class="btn btn-primary" value="Hae">
+            </div>
+        </div>
+    </form>
+    <ul class="list-group">
+        {% for recipe in recipes %}
+            <li class="list-group-item">
+                <a href="{{ url_for('recipe_page', id=recipe.id) }}">{{ recipe.recipename }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+<br>
+<a href="{{ url_for('index') }}" class="btn btn-secondary">Palaa etusivulle</a>
+</div>
 {% endblock %}
+
 
 

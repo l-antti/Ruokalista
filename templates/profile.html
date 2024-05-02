@@ -14,6 +14,7 @@ Tervetuloa omille sivuillesi {{ user.username }}!
       
       
       <form action="{{ url_for('remove_from_favorites', id=recipe.id) }}" method="post">
+      <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
         <button type="submit" class="btn" style="background-color: darkred; color: white;">Poista suosikeista</button>
       </form>
     </li>

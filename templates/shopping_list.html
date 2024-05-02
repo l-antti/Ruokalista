@@ -4,14 +4,12 @@
 
 <h2>Ostoslista</h2>
 
-<!-- Tässä on ostoslista -->
 <ul>
 {% for item in shopping_list %}
     <li>{{ item }}</li>
 {% endfor %}
 </ul>
 
-<!-- Tässä on nappula, joka ohjaa takaisin menu-sivulle -->
 <a href="{{ url_for('menu_view') }}" class="btn btn-primary">Takaisin ruokalistaan</a>
 
 {% endblock %}

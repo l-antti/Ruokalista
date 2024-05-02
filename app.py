@@ -1,5 +1,3 @@
-# main module
-# käynnistää sovelluksen
 
 from flask import Flask
 from os import getenv

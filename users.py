@@ -1,6 +1,3 @@
-#users module
-# käyttäjän luominen, kirjautuminen sisään ja ulos, käyttäjän tietojenhallinta
-
 from flask import redirect, render_template, request, session, flash
 from db import db
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -34,12 +31,6 @@ def is_user():
 def user_id():
     return session.get("user_id", 0)   
    
-def logout_user():
-    if "user_id" in session:
-        del session["user_id"]
-    if "username" in session:
-        del session["username"]
-    session["logged_in"] = False  
     
 def get_profile(id):
     sql = text("SELECT * FROM users WHERE id=:id")
@@ -58,18 +49,22 @@ def create_user(username, password, password2):
     
     
 def validator(username, password, password2):
+    errors = []
+    if username.strip() == "" or password.strip() == "":
+        errors.append("Käyttäjätunnus ja salasana eivät voi olla tyhjiä")
     if not password == password2:
-        flash("Yritä uudelleen! Salasanat eivät täsmää")
-        return False
-    if len(password) < 6 or len(password) > 25:
-        flash("Yritä uudelleen! Salasanassa tulee olla 7-24 merkkiä")
-        return False
+        errors.append("Yritä uudelleen! Salasanat eivät täsmää")
+    if len(password) < 7 or len(password) > 24:
+        errors.append("Yritä uudelleen! Salasanassa tulee olla 7-24 merkkiä")
     if len(username) < 3 or len(username) > 19: 
-        flash("Yritä uudelleen! Käyttäjätunnuksessa tulee olla 4-18 merkkiä")   
+        errors.append("Yritä uudelleen! Käyttäjätunnuksessa tulee olla 4-18 merkkiä")   
     if double_user(username) == False:
-       flash("Yritä uudelleen! Käyttäjätunnus on jo käytössä")
-       return False
+       errors.append("Yritä uudelleen! Käyttäjätunnus on jo käytössä")
        
+    if len(errors) > 0:
+        for error in errors:
+            flash(error)
+        return False
     return True
     
              

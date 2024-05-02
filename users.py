@@ -46,9 +46,6 @@ def get_profile(id):
     result = db.session.execute(sql, {"id": id}).fetchone()
     return result
     
-     
-
-
 
 def create_user(username, password, password2):
     if validator(username, password, password2) == True:

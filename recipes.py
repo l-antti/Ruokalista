@@ -103,14 +103,16 @@ def get_recipe(id):
         WHERE ri.recipe_id = :recipe_id
     """)
     ingredients = db.session.execute(sql, {"recipe_id": recipe.id}).fetchall()
-    # Convert ingredients list to a list of objects
+    # Convert ingredients list to a list of objects and sort by name
     ingredients_list = [{"name": i, "amount": ri, "unit": u} for i, ri, u in ingredients]
+    sorted_ingredients_list = sorted(ingredients_list, key=lambda x: x['name'])
     return {
         "id": recipe.id,
         "recipename": recipe.recipename,
         "instructions": recipe.instructions,
-        "ingredients": ingredients_list
+        "ingredients": sorted_ingredients_list
     }
+
     
  
 def search_recipes(query):
@@ -163,14 +165,12 @@ def get_favourite_recipes(id):
 
 
 def add_to_favourites(recipe_id, user_id):
-    # Tarkista, onko resepti jo suosikkilistalla
     sql = text("SELECT * FROM user_recipes WHERE user_id = :user_id AND recipe_id = :recipe_id")
     result = db.session.execute(sql, {"user_id": user_id, "recipe_id": recipe_id}).fetchone()
     if result:
         flash("Resepti on jo suosikkilistallasi!")
         return
 
-    # Jos resepti ei ole suosikkilistalla, lisää se
     sql = text("INSERT INTO user_recipes (user_id, recipe_id) VALUES (:user_id, :recipe_id)")
     db.session.execute(sql, {"user_id": user_id, "recipe_id": recipe_id})
     db.session.commit()
@@ -181,7 +181,6 @@ def remove_from_favourites(recipe_id, user_id):
     sql = text("DELETE FROM user_recipes WHERE user_id = :user_id AND recipe_id = :recipe_id")
     db.session.execute(sql, {"user_id": user_id, "recipe_id": recipe_id})
     db.session.commit()
-
 
 
 
@@ -216,7 +215,6 @@ def weekdays():
 
 
 def get_weekly_menu():
-    # Hae tallennettu viikoittainen valikko sessionista
     weekly_menu = session.get('menu', recipes.generate_weekly_menu())
     return weekly_menu
     
@@ -224,20 +222,26 @@ def get_weekly_menu():
 def get_shopping_list(weekly_menu):
     shopping_list = {}
     for day, meals in weekly_menu.items():
-        # Vain päivällinen otetaan huomioon
+        # Count only dinner 
         dinner_recipe = meals["Dinner"]
         recipe_id = dinner_recipe["id"]
         recipe = get_recipe(recipe_id)
         for ingredient in recipe['ingredients']:
-            # Lisää ainesosa ostoslistalle
+            # Add ingredient in shopping list
             if ingredient['name'] not in shopping_list:
                 shopping_list[ingredient['name']] = {
                     'amount': 0,
                     'unit': ingredient['unit']
                 }
             shopping_list[ingredient['name']]['amount'] += ingredient['amount']
-    shopping_list_items = [f"{item}: {data['amount']} {data['unit']}" for item, data in shopping_list.items()]
-    return shopping_list_items
+    
+    # Sort the shopping list by ingredient name
+    sorted_shopping_list_items = sorted(shopping_list.items(), key=lambda item: item[0])
+    
+    # Format the sorted shopping list items
+    formatted_shopping_list_items = [f"{item}: {data['amount']} {data['unit']}" for item, data in sorted_shopping_list_items]
+    return formatted_shopping_list_items
+
 
     
 

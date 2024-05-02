@@ -45,7 +45,7 @@ def login_check():
    
 @app.route("/logout")
 def logout():
-    users.logout_user()
+    session.clear()
     flash("Nähdään taas!")
     return redirect(url_for("index"))
          
@@ -172,13 +172,10 @@ def edit_added_recipe(id):
     if session.get("csrf_token") != request.form.get("csrf_token"):
         abort(403)
     try:
-        # Process the form data
         recipename, ingredients, instructions = process_form_data(request.form)
         
-        # Call the function to update the recipe in the database
         recipes.edit_recipe(id, recipename, ingredients, instructions)
         
-        flash("Resepti päivitetty onnistuneesti!")
         return redirect(url_for("recipe_page", id=id))
         
     except ValueError as e:
@@ -202,7 +199,7 @@ def search():
 def generate_menu():
     if session.get("csrf_token") != request.form.get("csrf_token"):
         abort(403)
-    menu = session.get('menu', recipes.generate_weekly_menu())
+    menu = recipes.generate_weekly_menu()
     session['menu'] = menu
     session['weekdays'] = recipes.weekdays()
     return redirect(url_for("menu_view"))
@@ -221,12 +218,15 @@ def menu_recipes():
     recipe_list = recipes.list_recipes()
     return render_template("list_recipes.html", recipes=recipe_list)
 
+
 @app.route("/generate_shopping_list")
 def generate_shopping_list():
     weekly_menu = session.get('menu')
+    if weekly_menu is None:
+        flash('Viikon ruokalistaa ei ole saatavilla. Ole hyvä ja luo se ensin.')
+        return redirect(url_for('menu')) 
     shopping_list = recipes.get_shopping_list(weekly_menu)
     return render_template("shopping_list.html", shopping_list=shopping_list)
-
 
 
 

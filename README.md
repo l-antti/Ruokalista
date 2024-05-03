@@ -12,7 +12,7 @@ Sovelluksen ominaisuuksia:
 
 
 Asennusohjeet:
-- kloonaa repositio omalle koneellesi.
+- kloonaa repositio omalle koneellesi
 - siirry ruokalista_sovellus kansioon ja luo sinne .env-tiedosto. Määritään tiedostoon kaksi riviä:
     - DATABASE_URL=postgresql:///<käyttänimi>
     - SECRET_KEY=<salainen_avain>

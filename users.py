@@ -16,7 +16,7 @@ def login_user(username, password):
     session["user_id"] = user.id
     session["username"] = username
     session["logged_in"] = True
-    session["is_admin"] = user.admin  # Tallenna käyttäjän rooli istuntoon
+    session["is_admin"] = user.admin
     return True
 
 

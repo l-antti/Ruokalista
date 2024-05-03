@@ -13,10 +13,10 @@ Sovelluksen ominaisuuksia:
 
 Asennusohjeet:
 - kloonaa repositio omalle koneellesi
-- siirry ruokalista_sovellus kansioon ja luo sinne .env-tiedosto. Määritään tiedostoon kaksi riviä:
+- siirry Ruokalista kansioon ja luo sinne .env-tiedosto. Määritään tiedostoon kaksi riviä:
     - DATABASE_URL=postgresql:///<käyttänimi>
     - SECRET_KEY=<salainen_avain>
-- aktivoi virtuaaliympäristö komennolla: $ python3 - m venv venv 
+- aktivoi virtuaaliympäristö komennolla: $ python3 -m venv venv 
 - $ source venv/bin/activate
 - varmista requirements.txt-tiedostosta, että riippuvuudet ovat ajantasalla komennolla: (venv) $ pip install -r requirements.txt
 - luo tietokannan tarvitsemat taulut tiedostosta schema.sql komennolla: (venv) $ psql < schema.sql

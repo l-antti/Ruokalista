@@ -24,7 +24,7 @@ Asennusohjeet:
 
 
 
-Käyttäjästä voi tehdä ylläpitäjän suraavasti:
+Käyttäjästä voi tehdä ylläpitäjän seuraavasti:
 - avaa PSQL-tulkki $ psql 
 - syötä komento UPDATE users SET admin = true WHERE username = 'käyttäjänimi'; , jossa 'käyttäjänimi' on sen käyttäjän nimi, jolle annetaan admin-oikeudet
  

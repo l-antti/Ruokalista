@@ -4,11 +4,10 @@ Sovelluksella voi helpottaa arjen ruokasuunnittelua.
 Sovelluksen ominaisuuksia:
 - kokoaa ruokalistan viikoksi 
 - tekee kauppalistan valituista ruuista
+- reseptejä pystyy selaamaan sekä etsimään nimellä tai haluamallaan raaka-aineella
 - käyttäjä voi luoda tunnuksen sekä kirjautua sisään ja ulos
-- käyttäjä voi lisätä uusia reseptejä ja selata jo olemassa olevia reseptejä
-- käyttäjä pystyy etsimään reseptejä nimellä tai tietyllä raaka-aineella
-- ylläpitäjä voi luoda resepteille luokkia (_katsotaan kerkiänkö tätä_)
-- ylläpitäjä voi muokata tai poistaa reseptejä  
+- käyttäjä voi lisätä uusia reseptejä
+- ylläpitäjä voi muokata reseptejä
 
 
 
@@ -25,10 +24,8 @@ Asennusohjeet:
 
 
 
-Välipalautus 3:
-Sovellus hyvässä mallissa. Ulkonäköä voisi vielä viilata. Raaka-aineiden kirjaaminen erikseen ja koostaminen yhdeksi kauppalistaksi aiheutti hieman päänvaivaa, joten luultavasti ylläpitäjän ominaisuudet jäävät tällä kertaa osittain pois.
-
-  
-Välipalautus 2:
-Sovelluksen perusrakenne alkaa hahmottumaan. Joitakin syötteen varmennuksia puuttuu vielä sekä ruokalista-arvonta ja kauppalistan koonti. 
+Käyttäjästä voi tehdä ylläpitäjän suraavasti:
+- avaa PSQL-tulkki $ psql 
+- syötä komento UPDATE users SET admin = true WHERE username = 'käyttäjänimi'; , jossa 'käyttäjänimi' on sen käyttäjän nimi, jolle annetaan admin-oikeudet
+ 
 

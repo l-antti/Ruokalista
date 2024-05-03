@@ -125,11 +125,12 @@ def add_new_recipe():
     try:
         recipename, ingredients, instructions = process_form_data(request.form)
         recipe = recipes.add_recipe(recipename, ingredients, instructions)
+        # Clear form data from session after successful recipe addition
+        session.pop('form_data', None) 
         return redirect(url_for("new_recipe"))  
     except ValueError as e:
         flash(str(e))
-        session.pop('form_data', None)
-        
+        session['form_data'] = request.form.to_dict(flat=False)
         return redirect(url_for("new_recipe"))
 
     

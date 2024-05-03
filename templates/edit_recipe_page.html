@@ -40,7 +40,7 @@
     <a href="{{ url_for('index') }}" class="btn btn-secondary">Palaa etusivulle</a>
 </div>
 <script>
-// JavaScript-koodi pysyy samana
+
 var ingredientIndex = {{ recipe.ingredients|length }};
 document.getElementById('addIngredient').addEventListener('click', function() {
     var newIngredient = document.createElement('div');

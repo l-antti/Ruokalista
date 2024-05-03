@@ -38,20 +38,48 @@
     <a href="{{ url_for('index') }}" class="btn btn-secondary">Palaa etusivulle</a>
 </div>
 <script>
-// JavaScript-koodi pysyy samana
+// This script manages the dynamic addition and removal of ingredient input fields in the form.
+
+// Initialize the ingredient index to keep track of the number of ingredient fields.
 var ingredientIndex = 1;
+
+// Add an event listener to the 'Add Ingredient' button to handle the click event.
 document.getElementById('addIngredient').addEventListener('click', function() {
+    // Create a new div element to hold the input fields for the new ingredient.
     var newIngredient = document.createElement('div');
-    newIngredient.classList.add('input-group', 'mb-2');
-    newIngredient.innerHTML = '<input type="text" class="form-control" name="ingredients[' + ingredientIndex + '].name" placeholder="Nimi" required><input type="number" class="form-control" name="ingredients[' + ingredientIndex + '].amount" min="0" placeholder="Määrä" required><select class="form-control" name="ingredients[' + ingredientIndex + '].unit"><option value="g">g</option><option value="kpl">kpl</option><option value="ml">ml</option><option value="rkl">rkl</option><option value="tl">tl</option></select><div class="input-group-append"><button type="button" class="btn btn-outline-secondary removeIngredient">Poista</button></div>';
+    newIngredient.classList.add('input-group', 'mb-2'); // Add Bootstrap classes for styling.
+
+    // Set the innerHTML of the div to include input fields for ingredient name, amount, and unit.
+    newIngredient.innerHTML = `
+        <input type="text" class="form-control" name="ingredients[${ingredientIndex}].name" placeholder="Nimi" required>
+        <input type="number" class="form-control" name="ingredients[${ingredientIndex}].amount" min="0" placeholder="Määrä" required>
+        <select class="form-control" name="ingredients[${ingredientIndex}].unit">
+            <option value="g">g</option>
+            <option value="kpl">kpl</option>
+            <option value="ml">ml</option>
+            <option value="rkl">rkl</option>
+            <option value="tl">tl</option>
+        </select>
+        <div class="input-group-append">
+            <button type="button" class="btn btn-outline-secondary removeIngredient">Poista</button>
+        </div>`; // Include a button to remove the ingredient.
+
+    // Append the new div to the container that holds all the ingredients.
     document.getElementById('ingredients').appendChild(newIngredient);
+
+    // Increment the ingredient index to ensure each ingredient has a unique name attribute.
     ingredientIndex++;
 });
+
+// Add an event listener to the ingredients container to handle the removal of ingredients.
 document.getElementById('ingredients').addEventListener('click', function(e) {
+    // Check if the clicked element is a remove button.
     if(e.target && e.target.classList.contains('removeIngredient')) {
+        // Find the closest parent div with the class 'input-group' and remove it.
         e.target.closest('.input-group').remove();
     }
 });
+
 </script>
 {% endblock %}
 

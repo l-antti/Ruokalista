@@ -1,6 +1,3 @@
-# recipe module
-# uusien reseptien lisääminen, selaus, reseptien etsiminen nimellä tai raaka-aineella
-
 from flask import redirect, render_template, request, flash, session
 from db import db
 from sqlalchemy.sql import text
